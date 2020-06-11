@@ -9,7 +9,7 @@ let db = {
         'https://firebasestorage.googleapis.com/v0/b/socialape-7cf41.appspot.com/o/no-img.png?alt=media',
       bio: 'hello my name is mk',
       website: 'http://.mk.com',
-      location: 'Brazil',
+      location: 'Lisbon, PT',
     },
   ],
   screams: [
