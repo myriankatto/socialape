@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import { Link } from 'react-router-dom';
+import AppIcon from '../images/icon.svg';
 
 //Material UI Stuff
 import AppBar from '@material-ui/core/AppBar';
@@ -12,6 +13,10 @@ export class NavBar extends Component {
     return (
       <AppBar>
         <Toolbar className="nav-container">
+        <div>
+        <Link to="/"><img src={AppIcon} alt="monkey" style={{maxWidth:'30px'}} /></Link>
+        </div>
+        <div>
           <Button color="inherit" component={Link} to="/login">
             Login
           </Button>
@@ -21,6 +26,7 @@ export class NavBar extends Component {
           <Button color="inherit" component={Link} to="/signup">
             Signup
           </Button>
+          </div>
         </Toolbar>
       </AppBar>
     );
