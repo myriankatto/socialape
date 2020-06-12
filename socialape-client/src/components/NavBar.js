@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import Link from 'react-router-dom/Link';
+import { Link } from 'react-router-dom';
 
 //Material UI Stuff
 import AppBar from '@material-ui/core/AppBar';
