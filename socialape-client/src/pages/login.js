@@ -14,8 +14,8 @@ import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 const styles = (theme) => ({
-  ...theme.spread
-})
+  ...theme.spread,
+});
 class login extends Component {
   constructor() {
     super();
@@ -26,7 +26,11 @@ class login extends Component {
       errors: {},
     };
   }
-
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.UI.errors) {
+      this.setState({ errors: nextProps.UI.errors });
+    }
+  }
   handleSubmit = (event) => {
     event.preventDefault();
     this.setState({
@@ -40,7 +44,7 @@ class login extends Component {
       .post('/login', userData)
       .then((res) => {
         console.log(res.data);
-        localStorage.setItem('FBIdToken', `Bearer ${res.data.token}`)
+        localStorage.setItem('FBIdToken', `Bearer ${res.data.token}`);
 
         this.setState({
           loading: false,
@@ -101,11 +105,15 @@ class login extends Component {
                 {errors.general}
               </Typography>
             )}
-            <Button type="submit" variant="contained" color="primary" className={classes.button} disabled={loading}>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              disabled={loading}
+            >
               Login
-              {loading && (
-                <CircularProgress className={classes.progress} size={25}/>
-              )}
+              {loading && <CircularProgress className={classes.progress} size={25} />}
             </Button>
             <br></br>
             <small>
