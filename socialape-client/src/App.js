@@ -27,7 +27,6 @@ import axios from 'axios';
 
 const theme = createMuiTheme(themeFile);
 
-
 //to make the token works on the page until it expired
 const token = localStorage.FBIdToken;
 if (token) {
@@ -45,18 +44,18 @@ if (token) {
 function App() {
   return (
     <MuiThemeProvider theme={theme}>
-      <div className="App">
+      <Provider store={store}>
         <Router>
           <NavBar />
           <div className="container">
             <Switch>
-              <AuthRoute exact path="/" component={home} />
-              <AuthRoute exact path="/login" component={login}  />
+              <Route exact path="/" component={home} />
+              <AuthRoute exact path="/login" component={login} />
               <AuthRoute exact path="/signup" component={signup} />
             </Switch>
           </div>
         </Router>
-      </div>
+      </Provider>
     </MuiThemeProvider>
   );
 }

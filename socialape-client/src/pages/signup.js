@@ -1,21 +1,24 @@
 import React, { Component } from 'react';
-
+import withStyles from '@material-ui/core/styles/withStyles';
 import PropTypes from 'prop-types';
 import AppIcon from '../images/icon.svg';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-//MUI stuff
-import withStyles from '@material-ui/core/styles/withStyles';
+// MUI Stuff
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+// Redux stuff
+import { connect } from 'react-redux';
+import { signupUser } from '../redux/actions/userActions';
+
 const styles = (theme) => ({
-  ...theme.spread,
+  ...theme.spread
 });
+
 class signup extends Component {
   constructor() {
     super();
@@ -24,55 +27,48 @@ class signup extends Component {
       password: '',
       confirmPassword: '',
       handle: '',
-      loading: false,
-      errors: {},
+      errors: {}
     };
+  }
+
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (nextProps.UI.errors) {
+      this.setState({ errors: nextProps.UI.errors });
+    }
   }
 
   handleSubmit = (event) => {
     event.preventDefault();
     this.setState({
-      loading: true,
+      loading: true
     });
     const newUserData = {
       email: this.state.email,
       password: this.state.password,
       confirmPassword: this.state.confirmPassword,
-      handle: this.state.handle,
+      handle: this.state.handle
     };
-    axios
-      .post('/signup', newUserData)
-      .then((res) => {
-        console.log(res.data);
-        localStorage.setItem('FBIdToken', `Bearer ${res.data.token}`)
-        this.setState({
-          loading: false,
-        });
-        this.props.history.push('/'); //to redirect to the home page
-      })
-      .catch((err) => {
-        this.setState({
-          errors: err.response.data,
-          loading: false,
-        });
-      });
+    this.props.signupUser(newUserData, this.props.history);
   };
-
   handleChange = (event) => {
     this.setState({
-      [event.target.name]: event.target.value,
+      [event.target.name]: event.target.value
     });
   };
   render() {
-    const { classes } = this.props;
-    const { errors, loading } = this.state;
+    const {
+      classes,
+      UI: { loading }
+    } = this.props;
+    const { errors } = this.state;
+
     return (
       <Grid container className={classes.form}>
         <Grid item sm />
         <Grid item sm>
           <img src={AppIcon} alt="monkey" className={classes.image} />
           <Typography variant="h4" className={classes.pageTitle}>
-            Signup
+            SignUp
           </Typography>
           <form noValidate onSubmit={this.handleSubmit}>
             <TextField
@@ -115,7 +111,7 @@ class signup extends Component {
               id="handle"
               name="handle"
               type="text"
-              label="Name"
+              label="Handle"
               className={classes.textField}
               helperText={errors.handle}
               error={errors.handle ? true : false}
@@ -135,12 +131,14 @@ class signup extends Component {
               className={classes.button}
               disabled={loading}
             >
-              Signup
-              {loading && <CircularProgress className={classes.progress} size={25} />}
+              SignUp
+              {loading && (
+                <CircularProgress size={30} className={classes.progress} />
+              )}
             </Button>
-            <br></br>
+            <br />
             <small>
-              Already have an account? Login <Link to="/login">here</Link>.
+              Already have an account ? Login <Link to="/login">here</Link>
             </small>
           </form>
         </Grid>
@@ -152,5 +150,17 @@ class signup extends Component {
 
 signup.propTypes = {
   classes: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
+  UI: PropTypes.object.isRequired,
+  signupUser: PropTypes.func.isRequired
 };
-export default withStyles(styles)(signup);
+
+const mapStateToProps = (state) => ({
+  user: state.user,
+  UI: state.UI
+});
+
+export default connect(
+  mapStateToProps,
+  { signupUser }
+)(withStyles(styles)(signup));
